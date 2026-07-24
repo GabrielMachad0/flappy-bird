@@ -1,3 +1,18 @@
-127.0.0.1 - - [24/Jul/2026 19:03:12] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [24/Jul/2026 19:03:12] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [24/Jul/2026 19:03:26] "GET /index.html HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/lib/python3.11/http/server.py", line 1309, in <module>
+    test(
+  File "/usr/lib/python3.11/http/server.py", line 1256, in test
+    with ServerClass(addr, HandlerClass) as httpd:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/socketserver.py", line 456, in __init__
+    self.server_bind()
+  File "/usr/lib/python3.11/http/server.py", line 1303, in server_bind
+    return super().server_bind()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/http/server.py", line 136, in server_bind
+    socketserver.TCPServer.server_bind(self)
+  File "/usr/lib/python3.11/soc10.213.68.3 - - [24/Jul/2026 19:11:43] "GET / HTTP/1.1" 200 -
+10.213.68.3 - - [24/Jul/2026 19:12:46] "GET / HTTP/1.1" 200 -
+10.213.68.3 - - [24/Jul/2026 19:12:50] "GET / HTTP/1.1" 200 -
