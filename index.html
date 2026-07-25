@@ -282,6 +282,152 @@
   .lb-rank { color: rgba(255,255,255,0.5); width: 24px; text-align: left; }
   .lb-score { color: #FFD93D; }
   .lb-diff { color: rgba(255,255,255,0.4); font-size: 8px; }
+
+  /* ===== Weather / Climate ===== */
+  .weather-indicator {
+    position: absolute;
+    top: 60px; left: 16px;
+    z-index: 6;
+    font-size: 22px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 4px 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: opacity 0.5s;
+    pointer-events: none;
+  }
+  .weather-indicator.hidden { opacity: 0; }
+
+  /* ===== Zen Mode ===== */
+  .zen-hud {
+    position: absolute;
+    bottom: 130px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    text-align: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .zen-hud.show { opacity: 1; }
+  .zen-hud .big { font-size: 28px; color: #FFD93D; display: block; margin-bottom: 4px; }
+  .zen-item {
+    position: absolute;
+    pointer-events: none;
+    transition: none;
+  }
+
+  /* ===== Shop ===== */
+  .shop-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+  }
+  .shop-item.owned { border-color: rgba(255,217,61,0.3); background: rgba(255,217,61,0.08); }
+  .shop-btn {
+    background: linear-gradient(135deg, #FFD93D, #FFA500);
+    color: #1A535C;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #C97F00;
+    transition: transform 0.1s;
+  }
+  .shop-btn:active { transform: translateY(2px); }
+  .shop-btn:disabled { opacity: 0.4; cursor: default; transform: none; box-shadow: none; }
+  .shop-btn.owned-btn { background: rgba(255,255,255,0.1); color: #4CAF50; box-shadow: none; border: 1px solid #4CAF50; }
+  .coin-icon { color: #FFD93D; font-size: 14px; }
+
+  /* ===== Missions ===== */
+  .mission-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    width: 100%;
+  }
+  .mission-card.completed {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.1);
+  }
+  .mission-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 6px;
+    overflow: hidden;
+  }
+  .mission-progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #FFD93D, #FFA500);
+    transition: width 0.3s;
+  }
+  .mission-reward {
+    color: #FFD93D;
+    font-size: 9px;
+  }
+
+  /* ===== Coin HUD ===== */
+  .coin-hud {
+    position: absolute;
+    top: 16px; left: 64px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    color: #FFD93D;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .coin-hud.hidden { opacity: 0; }
+
+  /* ===== Tab buttons ===== */
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.5);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    border-color: #FFD93D;
+    background: rgba(255,217,61,0.15);
+    color: #FFD93D;
+  }
 </style>
 </head>
 <body>
@@ -339,7 +485,9 @@
         <div class="flex gap-3">
           <button id="lbBtn" class="btn-ghost">RANKING</button>
           <button id="achBtn" class="btn-ghost">CONQUISTAS</button>
+          <button id="shopBtn" class="btn-ghost">LOJA</button>
         </div>
+        <button id="zenBtn" class="btn-ghost mt-2">🧘 MODO ZEN</button>
       </div>
     </div>
 
@@ -358,6 +506,41 @@
         <h2 class="pixel text-base text-yellow-300 mb-4">CONQUISTAS</h2>
         <div id="achList" class="flex flex-col gap-2 items-start"></div>
         <button id="achBackBtn" class="btn-ghost mt-4">VOLTAR</button>
+      </div>
+    </div>
+
+    <!-- Weather indicator -->
+    <div id="weatherIndicator" class="weather-indicator hidden">☀️</div>
+
+    <!-- Zen HUD -->
+    <div id="zenHud" class="zen-hud">
+      <span id="zenScore" class="big">0</span>
+      <span id="zenTimer">—</span>
+    </div>
+
+    <!-- Coin HUD -->
+    <div id="coinHud" class="coin-hud hidden">
+      <span class="coin-icon">🪙</span>
+      <span id="coinCount">0</span>
+    </div>
+
+    <!-- Shop screen -->
+    <div id="shopScreen" class="overlay hidden">
+      <div class="float-in glass-card" style="max-width:380px;width:92%;">
+        <div class="flex items-center justify-center gap-2 mb-3">
+          <h2 class="pixel text-base text-yellow-300">LOJA</h2>
+          <span class="coin-icon">🪙</span>
+          <span id="shopCoins" class="pixel text-sm text-yellow-300">0</span>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" data-tab="shop-skins">SKINS</button>
+          <button class="tab-btn" data-tab="shop-powers">POWER-UP</button>
+          <button class="tab-btn" data-tab="shop-missions">MISSÕES</button>
+        </div>
+        <div id="shopSkins" class="scroll-y" style="max-height:40vh"></div>
+        <div id="shopPowers" class="scroll-y hidden" style="max-height:40vh"></div>
+        <div id="shopMissions" class="scroll-y hidden" style="max-height:40vh"></div>
+        <button id="shopBackBtn" class="btn-ghost mt-4">VOLTAR</button>
       </div>
     </div>
 
@@ -996,8 +1179,8 @@ function checkCollision() {
   return false;
 }
 
-// ---------- Update ----------
-function update() {
+// ---------- Update (main game logic) ----------
+function gameUpdate() {
   frame++;
 
   // Clouds always move
@@ -1132,6 +1315,9 @@ function update() {
     // Collision
     if (checkCollision()) gameOver();
 
+    // Zen mode update (when playing zen)
+    if (zenActive) updateZenMode();
+
   } else if (state === STATE.START) {
     // Idle bob
     bird.y = H * 0.42 + Math.sin(frame * 0.05) * 12;
@@ -1147,6 +1333,9 @@ function update() {
       bird.rot = Math.min(Math.PI / 2, bird.rot + 0.05);
     }
   }
+
+  // Weather (always)
+  updateWeather();
 
   // Particles
   for (const pt of particles) {
@@ -1535,6 +1724,600 @@ function drawFlash() {
 }
 
 // ---------- Main loop ----------
+// ============================================================
+//  WEATHER SYSTEM
+// ============================================================
+const WEATHERS = [
+  { id: 'clear',  icon: '☀️', label: 'Limpo',       precip: 0 },
+  { id: 'rain',   icon: '🌧️', label: 'Chuva',        precip: 1, color: 'rgba(174,194,224,0.5)' },
+  { id: 'storm',  icon: '⛈️', label: 'Tempestade',   precip: 1, color: 'rgba(80,100,140,0.6)', lightning: true },
+  { id: 'snow',   icon: '❄️', label: 'Neve',         precip: 2, color: 'rgba(255,255,255,0.7)' },
+  { id: 'wind',   icon: '💨', label: 'Vento',        precip: 0, windStr: 3 },
+];
+let currentWeather = WEATHERS[0];
+let weatherParticles = [];
+let weatherTimer = 0;
+let weatherDuration = 600; // frames
+let weatherFlashTimer = 0;
+let weatherChangePending = false;
+
+function changeWeather(w) {
+  currentWeather = w;
+  weatherTimer = 0;
+  weatherDuration = 600 + Math.floor(Math.random() * 400);
+  const el = document.getElementById('weatherIndicator');
+  if (el) { el.textContent = w.icon; el.classList.remove('hidden'); }
+  // Clear old weather particles
+  weatherParticles = [];
+}
+
+function randomWeather() {
+  const idx = Math.floor(Math.random() * WEATHERS.length);
+  changeWeather(WEATHERS[idx]);
+}
+
+function updateWeather() {
+  if (state !== STATE.PLAYING && state !== STATE.START) { weatherParticles = []; return; }
+  weatherTimer++;
+
+  // Change weather every 10-20 seconds
+  if (weatherTimer > weatherDuration) {
+    // Don't change during lightning flash
+    if (weatherFlashTimer <= 0) randomWeather();
+  }
+
+  // Spawn particles based on weather
+  const isPlay = state === STATE.PLAYING;
+  const sf = isPlay && slowActive ? slowFactor : 1;
+
+  if (currentWeather.id === 'rain') {
+    if (Math.random() < 0.4 * sf) {
+      weatherParticles.push({
+        x: Math.random() * W,
+        y: -10,
+        vx: -0.5,
+        vy: 8 + Math.random() * 4,
+        life: 60,
+        size: 1 + Math.random(),
+        color: 'rgba(174,194,224,0.5)',
+        type: 'rain',
+        len: 10 + Math.random() * 6,
+      });
+    }
+  } else if (currentWeather.id === 'storm') {
+    if (Math.random() < 0.7 * sf) {
+      weatherParticles.push({
+        x: Math.random() * W,
+        y: -10,
+        vx: -1,
+        vy: 10 + Math.random() * 6,
+        life: 50,
+        size: 1.5 + Math.random(),
+        color: 'rgba(80,100,140,0.6)',
+        type: 'rain',
+        len: 14 + Math.random() * 8,
+      });
+    }
+    // Lightning
+    if (weatherFlashTimer > 0) weatherFlashTimer--;
+    if (Math.random() < 0.003 && weatherFlashTimer <= 0) {
+      weatherFlashTimer = 8;
+    }
+  } else if (currentWeather.id === 'snow') {
+    if (Math.random() < 0.15 * sf) {
+      weatherParticles.push({
+        x: Math.random() * W,
+        y: -10,
+        vx: -0.3 + Math.random() * 0.6,
+        vy: 1.5 + Math.random() * 1.5,
+        life: 80 + Math.random() * 40,
+        size: 2 + Math.random() * 4,
+        color: 'rgba(255,255,255,0.8)',
+        type: 'snow',
+        wobble: Math.random() * Math.PI * 2,
+      });
+    }
+  } else if (currentWeather.id === 'wind') {
+    if (Math.random() < 0.5 * sf) {
+      weatherParticles.push({
+        x: -20,
+        y: Math.random() * H,
+        vx: 6 + Math.random() * 4,
+        vy: (Math.random() - 0.5) * 1.5,
+        life: 40 + Math.random() * 20,
+        size: 1 + Math.random() * 2,
+        color: 'rgba(200,220,255,0.2)',
+        type: 'wind',
+        len: 20 + Math.random() * 20,
+      });
+    }
+  }
+
+  // Update particles
+  for (const p of weatherParticles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.type === 'snow') {
+      p.wobble += 0.03;
+      p.x += Math.sin(p.wobble) * 0.5;
+    }
+    p.life--;
+  }
+  weatherParticles = weatherParticles.filter(p => p.life > 0 && p.y < H + 20 && p.x > -30 && p.x < W + 30);
+}
+
+function drawWeather() {
+  ctx.save();
+
+  // Lightning flash
+  if (currentWeather.id === 'storm' && weatherFlashTimer > 0) {
+    const alpha = (weatherFlashTimer / 8) * 0.6;
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // Weather overlay (subtle tint)
+  if (currentWeather.id === 'rain') {
+    ctx.fillStyle = 'rgba(174,194,224,0.06)';
+    ctx.fillRect(0, 0, W, H);
+  } else if (currentWeather.id === 'storm') {
+    ctx.fillStyle = 'rgba(40,50,80,0.15)';
+    ctx.fillRect(0, 0, W, H);
+  } else if (currentWeather.id === 'snow') {
+    ctx.fillStyle = 'rgba(200,220,255,0.04)';
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  for (const p of weatherParticles) {
+    ctx.globalAlpha = Math.min(1, p.life / 20);
+    if (p.type === 'rain') {
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = p.size;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + p.vx * 1.5, p.y - p.len);
+      ctx.stroke();
+    } else if (p.type === 'snow') {
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.type === 'wind') {
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = p.size;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x - p.len, p.y);
+      ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// ============================================================
+//  ZEN MODE
+// ============================================================
+let zenMode = false;
+let zenScore = 0;
+let zenTimer = 0;
+let zenMaxTime = 60 * 60; // 60 seconds at 60fps
+let zenItems = [];
+let zenActive = false;
+
+function startZenMode() {
+  state = STATE.PLAYING;
+  zenMode = true;
+  zenScore = 0;
+  zenTimer = zenMaxTime;
+  zenItems = [];
+  zenActive = true;
+  bird.y = H * 0.42;
+  bird.vy = 0;
+  bird.rot = 0;
+  bird.trail = [];
+  pipes = [];
+  particles = [];
+  scorePopups = [];
+  powerups = [];
+  score = 0;
+  frame = 0;
+  flashAlpha = 0;
+  combo = 0;
+  isNight = false;
+  nightTransition = 0;
+  shieldActive = false;
+  shieldTimer = 0;
+  slowActive = false;
+  slowTimer = 0;
+
+  startScreen.classList.add('hidden');
+  overScreen.classList.add('hidden');
+  pauseScreen.classList.add('hidden');
+  hudScore.classList.add('hidden');
+  hudPause.classList.add('hidden');
+  hudSound.classList.add('hidden');
+  hudPowerups.classList.add('hidden');
+
+  document.getElementById('zenHud').classList.add('show');
+  document.getElementById('coinHud').classList.remove('hidden');
+  updateZenHud();
+}
+
+function spawnZenItem() {
+  const types = ['star', 'moon', 'gem', 'heart', 'note'];
+  const type = types[Math.floor(Math.random() * types.length)];
+  const icons = { star: '⭐', moon: '🌙', gem: '💎', heart: '❤️', note: '🎵' };
+  const points = { star: 1, moon: 3, gem: 5, heart: 2, note: 4 };
+  const minY = 60;
+  const maxY = H - GROUND_H - 40;
+  zenItems.push({
+    x: W + 30,
+    y: minY + Math.random() * (maxY - minY),
+    type: type,
+    icon: icons[type],
+    points: points[type],
+    r: 14,
+    bob: Math.random() * Math.PI * 2,
+    collected: false,
+    speed: 0.8 + Math.random() * 0.5,
+  });
+}
+
+function updateZenMode() {
+  if (!zenActive) return;
+  const sf = slowActive ? slowFactor : 1;
+
+  // Bird physics (gentler)
+  bird.vy += 0.35 * sf;
+  bird.y += bird.vy * sf;
+  bird.rot = Math.max(-0.3, Math.min(1.2, bird.vy * 0.07));
+  bird.wingPhase += 0.25;
+
+  // Trail
+  bird.trail.push({ x: bird.x, y: bird.y, life: 12 });
+  if (bird.trail.length > 10) bird.trail.shift();
+  for (const t of bird.trail) t.life--;
+
+  // Boundaries
+  if (bird.y + bird.r >= H - GROUND_H) { bird.y = H - GROUND_H - bird.r; bird.vy = 0; }
+  if (bird.y - bird.r <= 0) { bird.y = bird.r; bird.vy = 0; }
+
+  // Timer
+  zenTimer--;
+  if (zenTimer % 60 === 0) updateZenHud();
+
+  // Spawn items
+  if (Math.random() < 0.02 * sf) spawnZenItem();
+
+  // Move items
+  for (const item of zenItems) {
+    item.x -= item.speed * sf;
+    item.bob += 0.05;
+    item.y += Math.sin(item.bob) * 0.5;
+
+    // Collect items
+    const dx = bird.x - item.x;
+    const dy = bird.y - item.y;
+    if (Math.sqrt(dx*dx + dy*dy) < bird.r + item.r && !item.collected) {
+      item.collected = true;
+      zenScore += item.points;
+      coins += item.points;
+      localStorage.setItem('flappy_coins', String(coins));
+      updateCoinHud();
+      updateZenHud();
+      sndScore();
+
+      // Collection particles
+      for (let i = 0; i < 8; i++) {
+        const a = (Math.PI * 2 * i) / 8;
+        particles.push({
+          x: item.x, y: item.y,
+          vx: Math.cos(a) * 2.5,
+          vy: Math.sin(a) * 2.5,
+          life: 20, maxLife: 20,
+          size: 3 + Math.random() * 2,
+          color: '#FFD93D',
+        });
+      }
+
+      // Popup
+      scorePopups.push({ x: item.x, y: item.y - 20, text: '+' + item.points, life: 35, vy: -1.5 });
+    }
+  }
+  zenItems = zenItems.filter(item => item.x > -30 && !item.collected);
+
+  // Ground scroll
+  groundOffset = (groundOffset + 1.2 * sf) % 40;
+
+  // Time up
+  if (zenTimer <= 0) {
+    endZenMode();
+  }
+}
+
+function endZenMode() {
+  zenActive = false;
+  zenMode = false;
+  state = STATE.START;
+  document.getElementById('zenHud').classList.remove('show');
+  document.getElementById('coinHud').classList.add('hidden');
+  hudScore.classList.add('hidden');
+  zenItems = [];
+
+  // Show summary
+  const zenBest = parseInt(localStorage.getItem('flappy_zen_best') || '0', 10);
+  if (zenScore > zenBest) {
+    localStorage.setItem('flappy_zen_best', String(zenScore));
+  }
+  // Check missions
+  checkMissions();
+  startScreen.classList.remove('hidden');
+}
+
+function updateZenHud() {
+  const el = document.getElementById('zenScore');
+  const timer = document.getElementById('zenTimer');
+  if (el) el.textContent = zenScore;
+  if (timer) {
+    const secs = Math.ceil(zenTimer / 60);
+    timer.textContent = formatTime(secs);
+  }
+}
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+// ============================================================
+//  COINS & SHOP
+// ============================================================
+let coins = parseInt(localStorage.getItem('flappy_coins') || '0', 10);
+
+const SHOP_ITEMS = [
+  // Skins (buyable)
+  { id: 'skin_ghost',  type: 'skin', name: 'Ghost',   price: 50,  icon: '👻', skinIdx: 4 },
+  { id: 'skin_neon',   type: 'skin', name: 'Neon',    price: 100, icon: '💚', skinIdx: 5 },
+  // Power-ups
+  { id: 'pu_shield',   type: 'power', name: 'Escudo+', price: 30, icon: '🛡', desc: 'Começa com escudo (5s)' },
+  { id: 'pu_slow',     type: 'power', name: 'Slow+',   price: 40, icon: '⏳', desc: 'Começa com slow-motion (6s)' },
+  { id: 'pu_both',     type: 'power', name: 'Combo+',  price: 60, icon: '⚡', desc: 'Escudo + Slow no início' },
+];
+
+let ownedItems = JSON.parse(localStorage.getItem('flappy_shop_owned') || '{}');
+
+function buyItem(itemId) {
+  const item = SHOP_ITEMS.find(i => i.id === itemId);
+  if (!item || ownedItems[itemId] || coins < item.price) return false;
+  coins -= item.price;
+  ownedItems[itemId] = true;
+  localStorage.setItem('flappy_coins', String(coins));
+  localStorage.setItem('flappy_shop_owned', JSON.stringify(ownedItems));
+  updateCoinHud();
+  return true;
+}
+
+function updateCoinHud() {
+  const el = document.getElementById('coinCount');
+  const shopEl = document.getElementById('shopCoins');
+  if (el) el.textContent = coins;
+  if (shopEl) shopEl.textContent = coins;
+}
+
+// Apply owned powerups when game starts
+function applyShopPowerups() {
+  // These are applied after startGame
+  setTimeout(() => {
+    const started = state === STATE.PLAYING && !zenMode;
+    if (!started) return;
+    // Apply shield
+    if (ownedItems['pu_shield'] || ownedItems['pu_both']) {
+      shieldActive = true;
+      shieldTimer = 300;
+      puShield.classList.remove('inactive');
+    }
+    // Apply slow
+    if (ownedItems['pu_slow']) {
+      slowActive = true;
+      slowTimer = 360;
+      slowFactor = 0.5;
+      puSlow.classList.remove('inactive');
+    }
+    if (ownedItems['pu_both'] && !ownedItems['pu_slow']) {
+      slowActive = true;
+      slowTimer = 360;
+      slowFactor = 0.5;
+      puSlow.classList.remove('inactive');
+    }
+  }, 100);
+}
+
+function renderShop(tab) {
+  const skinsDiv = document.getElementById('shopSkins');
+  const powersDiv = document.getElementById('shopPowers');
+  const missionsDiv = document.getElementById('shopMissions');
+
+  // Skins tab
+  skinsDiv.innerHTML = '';
+  SHOP_ITEMS.filter(i => i.type === 'skin').forEach(item => {
+    const owned = ownedItems[item.id] || item.skinIdx <= 3;
+    const div = document.createElement('div');
+    div.className = 'shop-item' + (owned ? ' owned' : '');
+    div.innerHTML = `
+      <span>${item.icon} ${item.name}</span>
+      <span>${owned ? '✅' : '🪙 ' + item.price}</span>
+    `;
+    if (!owned) {
+      const btn = document.createElement('button');
+      btn.className = 'shop-btn';
+      btn.textContent = 'COMPRAR';
+      btn.addEventListener('click', () => {
+        if (buyItem(item.id)) renderShop('shop-skins');
+      });
+      div.appendChild(btn);
+    } else {
+      const badge = document.createElement('span');
+      badge.className = 'shop-btn owned-btn';
+      badge.textContent = 'POSSUI';
+      div.appendChild(badge);
+    }
+    skinsDiv.appendChild(div);
+  });
+
+  // Powers tab
+  powersDiv.innerHTML = '';
+  SHOP_ITEMS.filter(i => i.type === 'power').forEach(item => {
+    const owned = ownedItems[item.id];
+    const div = document.createElement('div');
+    div.className = 'shop-item' + (owned ? ' owned' : '');
+    div.innerHTML = `
+      <span>${item.icon} ${item.name}</span>
+      <span style="font-size:7px;color:rgba(255,255,255,0.6)">${item.desc}</span>
+      <span>${owned ? '✅' : '🪙 ' + item.price}</span>
+    `;
+    if (!owned) {
+      const btn = document.createElement('button');
+      btn.className = 'shop-btn';
+      btn.textContent = 'COMPRAR';
+      btn.addEventListener('click', () => {
+        if (buyItem(item.id)) renderShop('shop-powers');
+      });
+      div.appendChild(btn);
+    } else {
+      const badge = document.createElement('span');
+      badge.className = 'shop-btn owned-btn';
+      badge.textContent = 'POSSUI';
+      div.appendChild(badge);
+    }
+    powersDiv.appendChild(div);
+  });
+
+  // Missions tab
+  missionsDiv.innerHTML = '';
+  renderMissions(missionsDiv);
+}
+
+// ============================================================
+//  MISSIONS
+// ============================================================
+let missions = JSON.parse(localStorage.getItem('flappy_missions') || 'null');
+let missionProgress = JSON.parse(localStorage.getItem('flappy_mission_progress') || '{}');
+
+function generateDailyMissions() {
+  const today = new Date().toDateString();
+  const saved = localStorage.getItem('flappy_missions_date');
+  if (saved === today && missions) return;
+
+  const allMissions = [
+    { id: 'score10',  name: 'Pontuador',     desc: 'Marque 10 pontos',       need: 10, reward: 15 },
+    { id: 'score20',  name: 'Voador',        desc: 'Marque 20 pontos',       need: 20, reward: 25 },
+    { id: 'combo3',   name: 'Combinador',    desc: 'Combo x3',               need: 3,  reward: 10 },
+    { id: 'combo5',   name: 'Mestre Combo',  desc: 'Combo x5',               need: 5,  reward: 20 },
+    { id: 'power2',   name: 'Colecionador',  desc: 'Pegue 2 power-ups',      need: 2,  reward: 15 },
+    { id: 'zen50',    name: 'Zen Mestre',    desc: '50 pts no Modo Zen',     need: 50, reward: 30 },
+    { id: 'zen100',   name: 'Iluminado',     desc: '100 pts no Modo Zen',    need: 100, reward: 50 },
+    { id: 'survive30', name: 'Resistente',   desc: 'Sobreviva 30s com shield',need: 30, reward: 20 },
+    { id: 'noCrash',  name: 'Precisão',      desc: 'Passe 15 canos sem colidir', need: 15, reward: 25 },
+    { id: 'hard10',   name: 'Desafiador',    desc: '10 pts no Difícil',      need: 10, reward: 35 },
+    { id: 'coins50',  name: 'Rico',          desc: 'Ganhe 50 moedas total',  need: 50, reward: 20 },
+    { id: 'weather5', name: 'Climático',     desc: 'Jogue com 5 climas dif.', need: 5,  reward: 25 },
+  ];
+
+  // Pick 4 random missions
+  const shuffled = [...allMissions].sort(() => Math.random() - 0.5);
+  missions = shuffled.slice(0, 4).map(m => ({
+    ...m,
+    progress: missionProgress[m.id] || 0,
+    completed: missionProgress[m.id + '_done'] || false,
+  }));
+  localStorage.setItem('flappy_missions', JSON.stringify(missions));
+  localStorage.setItem('flappy_missions_date', today);
+}
+
+function checkMissions() {
+  let earned = 0;
+  const today = new Date().toDateString();
+  const savedDate = localStorage.getItem('flappy_missions_date');
+  if (savedDate !== today) { generateDailyMissions(); return; }
+
+  missions = JSON.parse(localStorage.getItem('flappy_missions'));
+  if (!missions) return;
+
+  missions.forEach((m, i) => {
+    if (m.completed) return;
+    // Calculate progress based on current run
+    let progress = 0;
+    const mId = m.id;
+    if (mId === 'score10' || mId === 'score20') progress = Math.min(m.need, score);
+    else if (mId === 'combo3' || mId === 'combo5') progress = Math.min(m.need, maxCombo);
+    else if (mId === 'power2') progress = Math.min(m.need, gameStats.powerupsCollected);
+    else if (mId === 'zen50' || mId === 'zen100') progress = Math.min(m.need, zenScore);
+    else if (mId === 'survive30') progress = Math.min(m.need, shieldTimer > 0 ? Math.floor((300 - shieldTimer) / 60) : 0);
+    else if (mId === 'noCrash') progress = Math.min(m.need, score);
+    else if (mId === 'hard10') progress = diffKey === 'hard' ? Math.min(m.need, score) : 0;
+    else if (mId === 'coins50') progress = Math.min(m.need, parseInt(localStorage.getItem('flappy_coins') || '0', 10));
+    else if (mId === 'weather5') progress = Math.min(m.need, Math.floor(weatherTimer / 600));
+
+    m.progress = Math.max(m.progress || 0, progress);
+    missionProgress[m.id] = m.progress;
+
+    if (m.progress >= m.need && !m.completed) {
+      m.completed = true;
+      missionProgress[m.id + '_done'] = true;
+      coins += m.reward;
+      localStorage.setItem('flappy_coins', String(coins));
+      updateCoinHud();
+      earned += m.reward;
+    }
+  });
+
+  localStorage.setItem('flappy_missions', JSON.stringify(missions));
+  localStorage.setItem('flappy_mission_progress', JSON.stringify(missionProgress));
+
+  if (earned > 0) {
+    flashAlpha = 0.5;
+    setTimeout(() => {
+      flashAlpha = 0;
+    }, 300);
+  }
+}
+
+function renderMissions(container) {
+  const today = new Date().toDateString();
+  const savedDate = localStorage.getItem('flappy_missions_date');
+
+  if (savedDate !== today) { generateDailyMissions(); }
+
+  missions = JSON.parse(localStorage.getItem('flappy_missions'));
+  if (!missions || missions.length === 0) {
+    container.innerHTML = '<p class="text-white/40 text-sm text-center pixel" style="font-size:8px">Nenhuma missão hoje!</p>';
+    return;
+  }
+
+  missions.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'mission-card' + (m.completed ? ' completed' : '');
+    const pct = Math.min(100, Math.round(((m.progress || 0) / m.need) * 100));
+    card.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span>${m.completed ? '✅' : '📋'} ${m.name}</span>
+        <span class="mission-reward">🪙 ${m.reward}</span>
+      </div>
+      <div class="text-white/40" style="font-size:7px">${m.desc}</div>
+      <div class="mission-progress">
+        <div class="mission-progress-bar" style="width:${pct}%"></div>
+      </div>
+      <div class="text-white/40 text-right" style="font-size:7px">${m.progress || 0}/${m.need}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ============================================================
+//  INTEGRATED RENDER
+// ============================================================
 function render() {
   ctx.save();
   if (shakeT > 0) {
@@ -1547,9 +2330,32 @@ function render() {
   drawSky();
   drawMountains();
   drawClouds();
+  drawWeather();
   drawTrail();
   for (const p of pipes) drawPipe(p);
   drawPowerups();
+
+  // Draw zen items
+  if (zenActive) {
+    for (const item of zenItems) {
+      if (item.collected) continue;
+      ctx.save();
+      ctx.translate(item.x, item.y);
+      // Glow
+      const gg = ctx.createRadialGradient(0, 0, 0, 0, 0, item.r + 10);
+      gg.addColorStop(0, 'rgba(255,217,61,0.2)');
+      gg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = gg;
+      ctx.fillRect(-item.r - 10, -item.r - 10, (item.r + 10) * 2, (item.r + 10) * 2);
+      // Icon
+      ctx.font = '20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(item.icon, 0, 0);
+      ctx.restore();
+    }
+  }
+
   drawGround();
   drawBird();
   drawParticles();
@@ -1559,11 +2365,75 @@ function render() {
   ctx.restore();
 }
 
+// ============================================================
+//  INTEGRATED UPDATE — loop entry (delegates to gameUpdate)
+// ============================================================
+function update() {
+  gameUpdate();
+}
+
+// ============================================================
+//  EVENT BINDINGS
+// ============================================================
+document.getElementById('shopBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  generateDailyMissions();
+  updateCoinHud();
+  renderShop('shop-skins');
+  startScreen.classList.add('hidden');
+  shopScreen.classList.remove('hidden');
+  // Reset tabs
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-tab="shop-skins"]').classList.add('active');
+  document.getElementById('shopSkins').classList.remove('hidden');
+  document.getElementById('shopPowers').classList.add('hidden');
+  document.getElementById('shopMissions').classList.add('hidden');
+});
+
+document.getElementById('shopBackBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  shopScreen.classList.add('hidden');
+  startScreen.classList.remove('hidden');
+});
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('shopSkins').classList.toggle('hidden', tab !== 'shop-skins');
+    document.getElementById('shopPowers').classList.toggle('hidden', tab !== 'shop-powers');
+    document.getElementById('shopMissions').classList.toggle('hidden', tab !== 'shop-missions');
+    renderShop(tab);
+  });
+});
+
+// Zen mode button
+document.getElementById('zenBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  startZenMode();
+});
+
+// Override startGame to apply shop powerups
+const _origStartGame = startGame;
+function startGame() {
+  _origStartGame();
+  applyShopPowerups();
+}
+
+// Override the loop to add our update
+// (already done via monkey-patching update above)
+
 function loop() {
   update();
   render();
   requestAnimationFrame(loop);
 }
+
+// Init
+generateDailyMissions();
+updateCoinHud();
 
 loop();
 </script>

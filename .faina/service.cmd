@@ -1,1 +1,1 @@
-python3 -m http.server $PORT
+cd /workspaces/574db01f-465a-439e-8355-bed9f7059bb6/91a30d1e-ce03-4b35-9bc9-18a2b82d5464 && python3 -m http.server $PORT

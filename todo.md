@@ -1,14 +1,12 @@
 # Plano
 ## Tarefa
-Adicionar mais recursos ao Flappy Bird+ (jogo já existe no GitHub e Vercel) e publicar
+Recriar o Flappy Bird como webapp completo (HTML/CSS/JS)
 ## Itens
-- [x] Adicionar botão de som (mute/unmute) no HUD
-- [x] Adicionar sistema de power-ups (escudo + slow-motion)
-- [x] Adicionar canos oscilantes (movimento vertical)
-- [x] Adicionar leaderboard local (top 5 scores)
-- [x] Adicionar mais conquistas
-- [x] Subir dev server e testar no browser
-- [x] Commitar e fazer push para GitHub
-- [x] Publicar em produção na Vercel
+- [x] Criar jogo Flappy Bird (index.html com 2441 linhas)
+- [x] Subir servidor na porta correta
+- [x] Testar que o servidor responde (curl 200)
+- [x] Criar repositório no GitHub (flappy-bird)
+- [x] Fazer push para o GitHub
+- [x] Publicar na Vercel
 ## Status
-Concluído — todos os recursos adicionados e publicados em produção
+Concluído — app no ar e servidor rodando.
